@@ -84,14 +84,14 @@ class DirenvProjectService(private val project: Project) {
         while (parser.nextToken() != null) {
             if (parser.currentToken == JsonToken.FIELD_NAME) {
                 when (parser.nextToken()) {
-                    JsonToken.VALUE_NULL -> envService.unsetVariable(parser.currentName)
-                    JsonToken.VALUE_STRING -> envService.setVariable(parser.currentName, parser.valueAsString)
+                    JsonToken.VALUE_NULL -> envService.unsetVariable(parser.currentName())
+                    JsonToken.VALUE_STRING -> envService.setVariable(parser.currentName(), parser.valueAsString)
 
                     else -> continue
                 }
 
                 didWork = true
-                logger.trace { "Set variable ${parser.currentName} to ${parser.valueAsString}" }
+                logger.trace { "Set variable ${parser.currentName()} to ${parser.valueAsString}" }
             }
         }
 

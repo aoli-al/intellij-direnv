@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+- Migrate build to IntelliJ Platform Gradle Plugin 2.x (`org.jetbrains.intellij.platform`)
+- Add IntelliJ IDEA 2025.3 compatibility (`since-build` `253`, `until-build` `253.*`)
+
 ## [0.2.10] - 2024-07-27
 
 - Remove upper version bound

@@ -1,5 +1,6 @@
 package systems.fehn.intellijdirenv.settings;
 
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.components.JBCheckBox;
@@ -16,8 +17,11 @@ public class DirenvSettingsComponent {
 
 
     public DirenvSettingsComponent() {
-        direnvPath.addBrowseFolderListener( "Direnv Path", "Path to the direnv file", null,
-                FileChooserDescriptorFactory.createSingleFileDescriptor());
+        FileChooserDescriptor descriptor = FileChooserDescriptorFactory.singleFile();
+        descriptor.setTitle("Choose Directory");
+        descriptor.setDescription( "Choose the path to the direnv file");
+        direnvPath.addBrowseFolderListener(null, descriptor);
+
         mainPanel = FormBuilder
                 .createFormBuilder()
                 .addLabeledComponent(new JLabel("DirenvPath: "), direnvPath, 1, false)
