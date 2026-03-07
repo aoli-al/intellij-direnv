@@ -1,8 +1,11 @@
 # direnv integration for JetBrains IDEs
 
-![Build](https://github.com/fehnomenal/intellij-direnv/actions/workflows/build.yml/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/15285.svg)](https://plugins.jetbrains.com/plugin/15285)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/15285.svg)](https://plugins.jetbrains.com/plugin/15285)
+> [!NOTE]  
+> This is a fork of [fehnomenal/intellij-direnv](https://github.com/fehnomenal/intellij-direnv).
+
+![Build](https://github.com/aoli-al/intellij-direnv/actions/workflows/build.yml/badge.svg)
+[![Version](https://img.shields.io/jetbrains/plugin/v/30539.svg)](https://plugins.jetbrains.com/plugin/15285)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/15285.svg)](https://plugins.jetbrains.com/plugin/30539)
 
 
 <!-- Plugin description -->

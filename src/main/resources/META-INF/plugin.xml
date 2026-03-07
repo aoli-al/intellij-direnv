@@ -1,8 +1,8 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
-<idea-plugin url="https://github.com/fehnomenal/intellij-direnv">
-  <id>systems.fehn.intellijdirenv</id>
-  <name>Direnv Integration</name>
-  <vendor>fehnomenal</vendor>
+<idea-plugin url="https://github.com/aoli-al/intellij-direnv">
+  <id>al.aoli.intellijdirenv</id>
+  <name>Direnv</name>
+  <vendor>aoli-al</vendor>
 
   <depends>com.intellij.modules.platform</depends>
 
