@@ -20,11 +20,8 @@ If "Automatic Import on Startup" is disabled, a popup notification will appear w
 
 ### Manual Import
 To manually load an `.envrc` file: 
-- If you have the main toolbar enabled (<kbd>View</kbd> > <kbd>Appearance</kbd> > <kbd>Main Toolbar</kbd>), a button next to the <kbd>Reload All from Disk</kbd> action will start the process.
 
-![action-icon](https://user-images.githubusercontent.com/9959940/98688979-b6c88700-236b-11eb-8e27-319f23376212.png)
-
-- You can also right-click on any `.envrc` file and click <kbd>Import Direnv</kbd> to load its contents.   
+- You can right-click on any `.envrc` file and click <kbd>Import Direnv</kbd> to load its contents.   
 
 **Note**: This plugin handles only `.envrc` files in the project root automatically, but you can use the right click method to manually import any `.envrc` file that is in the project directory.
 
