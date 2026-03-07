@@ -48,23 +48,12 @@ To manually load an `.envrc` file:
 ## Building from source
 
 ```shell script
-git clone https://github.com/fehnomenal/intellij-direnv
+git clone https://github.com/aoli-al/intellij-direnv
 cd intellij-direnv
 ./gradlew buildPlugin
 ```
 
 The plugin is now in the folder `build/distributions/` and can be installed manually.
-
-
-##### On NixOS
-
-The gradle plugins downloads JetBrains' JRE and fails to execute it.
-Add the following in `build.gradle.kts`:
-```kotlin
-tasks.withType<org.jetbrains.intellij.tasks.RunIdeBase> {
-    projectExecutable.set(org.gradle.internal.jvm.Jvm.current().javaExecutable.absolutePath)
-}
-```
 
 ---
 
