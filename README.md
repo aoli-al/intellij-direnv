@@ -9,12 +9,12 @@
 
 
 <!-- Plugin description -->
-This plugin provides an action to import environment variables from [direnv](https://github.com/direnv/direnv) into the Java process that is running the IDE.
+This plugin provides an action to import environment variables from [direnv](https://github.com/direnv/direnv) into plugin-managed project state and apply them to Run/Debug launches.
 
 ### Automatic Import before every Run/Debug
 To automatically load the environment variables from a `<project_root>/.envrc` file before each and every execution of a Run/Debug configuration, visit <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Direnv Settings</kbd> and tick the relevant checkbox.
 
-On starting a Run/Debug job, a notification will show if the existing environment has been changed. The newly spawned process which executes the Run/Debug configuration will inherit the environment. If you often work with multiple project windows open in a single IDE instance, this is probably the best option for you.
+On starting a Run/Debug job, a notification will show if the stored direnv environment has changed. The plugin applies that environment to the launched Run/Debug configuration without mutating the IDE process itself. If you often work with multiple project windows open in a single IDE instance, this is probably the best option for you.
 
 ### Automatic Import on Startup
 To automatically load the environment variables from a `<project_root>/.envrc` file when you open the project, visit <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Direnv Settings</kbd> and tick the relevant checkbox.
