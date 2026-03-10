@@ -56,13 +56,13 @@ jobs:
         env:
           CHANGELOG: ${{ steps.properties.outputs.changelog }}
         run: |
-          ./gradlew patchChangelog --release-note="$CHANGELOG"
+          ./gradlew patchChangelog --release-note="$CHANGELOG" --no-daemon
 
       # Publish the plugin to JetBrains Marketplace
       - name: Publish Plugin
         env:
           ORG_GRADLE_PROJECT_intellijPlatformPublishingToken: ${{secrets.ORG_GRADLE_PROJECT_INTELLIJPLATFORMPUBLISHINGTOKEN}}
-        run: ./gradlew publishPlugin
+        run: ./gradlew publishPlugin --no-daemon
 
       # Upload artifact as a release asset
       - name: Upload Release Asset

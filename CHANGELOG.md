@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-03-10
+
 - Migrate build to IntelliJ Platform Gradle Plugin 2.x (`org.jetbrains.intellij.platform`)
 - Add IntelliJ IDEA 2025.3 compatibility (`since-build` `253`, `until-build` `253.*`)
 
@@ -120,7 +122,8 @@
 
 - Initial release
 
-[Unreleased]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.10...HEAD
+[Unreleased]: https://github.com/fehnomenal/intellij-direnv/compare/v0.3.2...HEAD
+[0.3.2]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.10...v0.3.2
 [0.2.10]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.9...v0.2.10
 [0.2.9]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.8...v0.2.9
 [0.2.8]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.7...v0.2.8
