@@ -9,8 +9,7 @@ on:
 
 jobs:
 
-  # Prepare and publish the plugin to JetBrains Marketplace repository
-  release:
+  # Prepare and publish the plugin to JetBrains Marketplace repository release:
     name: Publish Plugin
     runs-on: ubuntu-latest
     permissions:
@@ -62,7 +61,7 @@ jobs:
       # Publish the plugin to JetBrains Marketplace
       - name: Publish Plugin
         env:
-          ORG_GRADLE_PROJECT_intellijPlatformPublishingToken: ${{secrets.ORG_GRADLE_PROJECT_intellijPlatformPublishingToken}}
+          ORG_GRADLE_PROJECT_intellijPlatformPublishingToken: ${{secrets.ORG_GRADLE_PROJECT_INTELLIJPLATFORMPUBLISHINGTOKEN}}
         run: ./gradlew publishPlugin
 
       # Upload artifact as a release asset
