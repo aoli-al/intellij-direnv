@@ -1,11 +1,13 @@
 package systems.fehn.intellijdirenv;
 
 import com.intellij.execution.CommonProgramRunConfigurationParameters;
+import com.intellij.execution.ExecutionManager;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 import systems.fehn.intellijdirenv.services.DirenvProjectService;
 import systems.fehn.intellijdirenv.settings.DirenvSettingsState;
@@ -17,15 +19,16 @@ class DirenvExecutionListener implements com.intellij.execution.ExecutionListene
     private static final Key<RunConfigurationEnvironmentState> RUN_CONFIGURATION_ENVIRONMENT_STATE_KEY =
             Key.create("systems.fehn.intellijdirenv.runConfigurationEnvironmentState");
 
-    public DirenvExecutionListener() {
+    public DirenvExecutionListener(Project project) {
+        MessageBusConnection connection = project.getMessageBus().connect();
+        connection.subscribe(
+                ExecutionManager.EXECUTION_TOPIC,
+                this
+        );
     }
 
     @Override
     public void processStarting(@NotNull String executorId, @NotNull ExecutionEnvironment env) {
-        if ( !DirenvSettingsState.getInstance().direnvSettingsImportEveryExecution ) {
-            com.intellij.execution.ExecutionListener.super.processStarting(executorId, env);
-            return;
-        }
 
         Project project = env.getProject();
         DirenvProjectService service = project.getService(DirenvProjectService.class);
@@ -49,7 +52,7 @@ class DirenvExecutionListener implements com.intellij.execution.ExecutionListene
                 new RunConfigurationEnvironmentState(new LinkedHashMap<>(configuration.getEnvs()), configuration.isPassParentEnvs())
         );
         configuration.setEnvs(effectiveEnvironment);
-        configuration.setPassParentEnvs(false);
+        configuration.setPassParentEnvs(true);
         com.intellij.execution.ExecutionListener.super.processStarting(executorId, env);
     }
 
