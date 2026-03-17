@@ -3,6 +3,7 @@ package systems.fehn.intellijdirenv.services
 import com.fasterxml.jackson.core.JsonFactory
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
+import com.intellij.execution.RunManager
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
@@ -13,9 +14,9 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.VirtualFile
+import systems.fehn.intellijdirenv.EnvironmentAccessor
 import systems.fehn.intellijdirenv.MyBundle
 import systems.fehn.intellijdirenv.notificationGroup
-import systems.fehn.intellijdirenv.settings.DirenvEnvironmentSnapshot
 import systems.fehn.intellijdirenv.settings.DirenvProjectSettingsState
 import systems.fehn.intellijdirenv.settings.DirenvSettingsState
 import systems.fehn.intellijdirenv.switchNull
@@ -56,6 +57,7 @@ class DirenvProjectService(private val project: Project) {
             val didWork = handleDirenvOutput(parser)
 
             if (didWork) {
+                applyToAllRunConfigurations()
                 notificationGroup
                     .createNotification(
                         MyBundle.message("executedSuccessfully"),
@@ -101,8 +103,22 @@ class DirenvProjectService(private val project: Project) {
         return projectSettings.updateEnvironment(loadedEnvironment, unloadedEnvironment)
     }
 
-    fun currentImportedEnvironment(): DirenvEnvironmentSnapshot {
-        return projectSettings.snapshot()
+    internal fun applyDirenvTo(accessor: EnvironmentAccessor) {
+        val snapshot = projectSettings.snapshot()
+        if (snapshot.isEmpty()) return
+
+        val merged = LinkedHashMap(snapshot.loadedEnvironment)
+        // User-configured envs take priority over direnv
+        merged.putAll(accessor.getEnvs())
+        accessor.setEnvs(merged)
+    }
+
+    private fun applyToAllRunConfigurations() {
+        val runManager = RunManager.getInstance(project)
+        for (settings in runManager.allSettings) {
+            val accessor = EnvironmentAccessor.forRunProfile(settings.configuration) ?: continue
+            applyDirenvTo(accessor)
+        }
     }
 
     private fun handleDirenvError(process: Process, envrcFile: VirtualFile) {

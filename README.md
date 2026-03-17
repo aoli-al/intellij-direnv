@@ -9,22 +9,29 @@
 
 
 <!-- Plugin description -->
-This plugin provides an action to import environment variables from [direnv](https://github.com/direnv/direnv) into plugin-managed project state and apply them to Run/Debug launches.
+This plugin provides an action to import environment variables from [direnv](https://github.com/direnv/direnv) and **persistently apply them to all Run/Debug configurations** in the project.
+
+### How It Works
+
+When direnv environment variables are imported, the plugin merges them into the **Environment Variables** section of every Run/Debug configuration in the project. The variables are visible and editable in <kbd>Run/Debug Configurations</kbd> > <kbd>Environment variables</kbd>.
+
+- Direnv variables serve as defaults — any variable you manually set in a Run/Debug configuration takes priority over the direnv value.
+- The plugin supports standard run configurations (Java, Kotlin, Python, Node.js, etc.) as well as Gradle, Maven, and other external system configurations.
 
 ### Automatic Import before every Run/Debug
 To automatically load the environment variables from a `<project_root>/.envrc` file before each and every execution of a Run/Debug configuration, visit <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Direnv Settings</kbd> and tick the relevant checkbox.
 
-On starting a Run/Debug job, a notification will show if the stored direnv environment has changed. The plugin applies that environment to the launched Run/Debug configuration without mutating the IDE process itself. If you often work with multiple project windows open in a single IDE instance, this is probably the best option for you.
+On starting a Run/Debug job, the plugin re-imports direnv and applies the latest environment to all run configurations. If you often work with multiple project windows open in a single IDE instance, this is probably the best option for you.
 
 ### Automatic Import on Startup
 To automatically load the environment variables from a `<project_root>/.envrc` file when you open the project, visit <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Direnv Settings</kbd> and tick the relevant checkbox.
 
-If "Automatic Import on Startup" is disabled, a popup notification will appear whenever a project with a `.envrc` file in the root is opened. You can load the `.envrc` file by clicking on the link in the notification. 
+If "Automatic Import on Startup" is disabled, a popup notification will appear whenever a project with a `.envrc` file in the root is opened. You can load the `.envrc` file by clicking on the link in the notification.
 
 ### Manual Import
-To manually load an `.envrc` file: 
+To manually load an `.envrc` file:
 
-- You can right-click on any `.envrc` file and click <kbd>Import Direnv</kbd> to load its contents.   
+- You can right-click on any `.envrc` file and click <kbd>Import Direnv</kbd> to load its contents.
 
 **Note**: This plugin handles only `.envrc` files in the project root automatically, but you can use the right click method to manually import any `.envrc` file that is in the project directory.
 
