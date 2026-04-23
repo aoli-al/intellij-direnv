@@ -11,6 +11,12 @@
 <!-- Plugin description -->
 This plugin provides an action to import environment variables from [direnv](https://github.com/direnv/direnv) and **persistently apply them to all Run/Debug configurations** in the project.
 
+### IDEs
+
+This works in the following IDEs/versions:
+
+- x
+
 ### How It Works
 
 When direnv environment variables are imported, the plugin merges them into the **Environment Variables** section of every Run/Debug configuration in the project. The variables are visible and editable in <kbd>Run/Debug Configurations</kbd> > <kbd>Environment variables</kbd>.
