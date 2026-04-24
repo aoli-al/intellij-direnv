@@ -35,7 +35,7 @@ repositories {
 dependencies {
 
     intellijPlatform {
-        intellijIdea(properties("platformVersion"))
+        webstorm(properties("platformVersion"))
 
         // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
         plugins(properties("platformPlugins").map { it.split(',').map(String::trim).filter(String::isNotEmpty) })

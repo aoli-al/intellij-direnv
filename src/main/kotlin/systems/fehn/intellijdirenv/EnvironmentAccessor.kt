@@ -8,8 +8,6 @@ import java.lang.reflect.Method
 internal sealed interface EnvironmentAccessor {
     fun getEnvs(): Map<String, String>
     fun setEnvs(envs: Map<String, String>)
-    fun isPassParentEnvs(): Boolean
-    fun setPassParentEnvs(pass: Boolean)
 
     companion object {
         fun forRunProfile(runProfile: RunProfile): EnvironmentAccessor? {
@@ -39,16 +37,12 @@ private class CommonParamsAccessor(
 ) : EnvironmentAccessor {
     override fun getEnvs(): Map<String, String> = params.envs
     override fun setEnvs(envs: Map<String, String>) { params.envs = envs }
-    override fun isPassParentEnvs(): Boolean = params.isPassParentEnvs
-    override fun setPassParentEnvs(pass: Boolean) { params.isPassParentEnvs = pass }
 }
 
 private class ReflectiveAccessor(
     private val target: Any,
     private val envGetter: Method,
     private val envSetter: Method,
-    private val passParentGetter: Method,
-    private val passParentSetter: Method,
 ) : EnvironmentAccessor {
 
     @Suppress("UNCHECKED_CAST")
@@ -67,21 +61,6 @@ private class ReflectiveAccessor(
         }
     }
 
-    override fun isPassParentEnvs(): Boolean = try {
-        passParentGetter.invoke(target) as Boolean
-    } catch (e: Exception) {
-        LOG.warn("Failed to get passParentEnvs via reflection", e)
-        true
-    }
-
-    override fun setPassParentEnvs(pass: Boolean) {
-        try {
-            passParentSetter.invoke(target, pass)
-        } catch (e: Exception) {
-            LOG.warn("Failed to set passParentEnvs via reflection", e)
-        }
-    }
-
     companion object {
         private val LOG = logger<ReflectiveAccessor>()
 
@@ -91,11 +70,8 @@ private class ReflectiveAccessor(
                 val getter = findMethod(clazz, "getEnvs") ?: findMethod(clazz, "getEnv") ?: return null
                 val setter = findMethod(clazz, "setEnvs", Map::class.java)
                     ?: findMethod(clazz, "setEnv", Map::class.java) ?: return null
-                val isPass = findMethod(clazz, "isPassParentEnvs") ?: return null
-                val setPass = findMethod(clazz, "setPassParentEnvs", Boolean::class.java)
-                    ?: findMethod(clazz, "setPassParentEnvs", Boolean::class.javaPrimitiveType!!) ?: return null
 
-                ReflectiveAccessor(target, getter, setter, isPass, setPass)
+                ReflectiveAccessor(target, getter, setter)
             } catch (_: Exception) {
                 null
             }

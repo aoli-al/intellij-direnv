@@ -55,23 +55,13 @@ class DirenvProjectService(private val project: Project) {
         logger.info("Received direnv output: ${sb.toString()}")
         jsonFactory.createParser(sb.toString()).use { parser ->
             val didWork = handleDirenvOutput(parser)
-
-            if (didWork) {
-                applyToAllRunConfigurations()
-                notificationGroup
-                    .createNotification(
-                        MyBundle.message("executedSuccessfully"),
-                        "",
-                        NotificationType.INFORMATION,
-                    ).notify(project)
-            } else if (notifyNoChange) {
-                notificationGroup
-                    .createNotification(
-                        MyBundle.message("alreadyUpToDate"),
-                        "",
-                        NotificationType.INFORMATION,
-                    ).notify(project)
-            }
+            applyToAllRunConfigurations()
+            notificationGroup
+                .createNotification(
+                    MyBundle.message("executedSuccessfully"),
+                    "",
+                    NotificationType.INFORMATION,
+                ).notify(project)
         }
     }
 
