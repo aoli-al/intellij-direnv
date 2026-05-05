@@ -3,6 +3,7 @@ package systems.fehn.intellijdirenv
 import com.intellij.execution.CommonProgramRunConfigurationParameters
 import com.intellij.execution.configurations.RunProfile
 import com.intellij.openapi.diagnostic.logger
+import com.intellij.execution.configuration.EnvironmentVariablesData;
 import java.lang.reflect.Method
 
 internal sealed interface EnvironmentAccessor {
@@ -39,6 +40,41 @@ private class CommonParamsAccessor(
     override fun setEnvs(envs: Map<String, String>) { params.envs = envs }
 }
 
+private class EnvironmentVariablesDataAccessor(
+    private val target: Any,
+    private val getEnvDataMethod: Method,
+) : EnvironmentAccessor {
+
+    override fun getEnvs(): Map<String, String> {
+        return try {
+            val envData = getEnvDataMethod.invoke(target) as? EnvironmentVariablesData
+            envData?.envs ?: emptyMap()
+        } catch (e: Exception) {
+            LOG.warn("Failed to get environment variables from EnvironmentVariablesData", e)
+            emptyMap()
+        }
+    }
+
+    override fun setEnvs(envs: Map<String, String>) {
+        try {
+            val currentEnvData = getEnvDataMethod.invoke(target) as? EnvironmentVariablesData
+            if (currentEnvData != null) {
+                val mutableEnvs = currentEnvData.envs.toMutableMap()
+                mutableEnvs.putAll(envs)
+                val field = currentEnvData.javaClass.getDeclaredField("myEnvs")
+                field.setAccessible(true)
+                field.set(currentEnvData, mutableEnvs)
+            }
+        } catch (e: Exception) {
+            LOG.warn("Failed to set environment variables via EnvironmentVariablesData", e)
+        }
+    }
+
+    companion object {
+        private val LOG = logger<EnvironmentVariablesDataAccessor>()
+    }
+}
+
 private class ReflectiveAccessor(
     private val target: Any,
     private val envGetter: Method,
@@ -64,8 +100,18 @@ private class ReflectiveAccessor(
     companion object {
         private val LOG = logger<ReflectiveAccessor>()
 
-        fun tryCreate(target: Any): ReflectiveAccessor? {
+        fun tryCreate(target: Any): EnvironmentAccessor? {
             val clazz = target.javaClass
+            val getEnvDataMethod = findMethod(clazz, "getEnvData")
+            if (getEnvDataMethod != null) {
+                getEnvDataMethod.isAccessible = true
+                getEnvDataMethod.invoke(target)?.let { env ->
+                    if (env is EnvironmentVariablesData) {
+                        return EnvironmentVariablesDataAccessor(target, getEnvDataMethod)
+                    }
+                    return tryCreate(env)
+                }
+            }
             return try {
                 val getter = findMethod(clazz, "getEnvs") ?: findMethod(clazz, "getEnv") ?: return null
                 val setter = findMethod(clazz, "setEnvs", Map::class.java)
