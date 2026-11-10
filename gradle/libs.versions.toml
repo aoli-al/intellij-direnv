@@ -1,15 +1,17 @@
 [versions]
 # libraries
 exampleLibrary = "24.1.0"
+jacksonCore = "2.22.1"
 
 # plugins
 kotlin = "2.3.0"
 changelog = "2.5.0"
-intelliJPlatform = "2.11.0"
+intelliJPlatform = "2.20.1"
 qodana = "2026.1.0"
 kover = "0.9.5"
 
 [libraries]
+jacksonCore = { group = "com.fasterxml.jackson.core", name = "jackson-core", version.ref = "jacksonCore" }
 exampleLibrary = { group = "com.example", name = "exampleLibrary", version.ref = "exampleLibrary" }
 
 [plugins]
