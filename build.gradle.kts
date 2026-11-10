@@ -1,5 +1,7 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
+import org.jetbrains.intellij.platform.gradle.tasks.aware.RuntimeAware
 
 fun properties(key: String) = providers.gradleProperty(key)
 fun environment(key: String) = providers.environmentVariable(key)
@@ -33,18 +35,13 @@ repositories {
 
 // Dependencies are managed with Gradle version catalog - read more: https://docs.gradle.org/current/userguide/platforms.html#sub:version-catalog
 dependencies {
+    implementation(libs.jacksonCore)
 
     intellijPlatform {
-        webstorm(properties("platformVersion"))
+        create(properties("platformType"), properties("platformVersion"))
 
         // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
         plugins(properties("platformPlugins").map { it.split(',').map(String::trim).filter(String::isNotEmpty) })
-        val jetbrainsRuntime = System.getenv("JETBRAINS_JDK_HOME")
-        if (jetbrainsRuntime != null) {
-            jetbrainsRuntimeLocal(jetbrainsRuntime)
-        } else {
-            jetbrainsRuntime()
-        }
     }
 }
 
@@ -102,7 +99,7 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            recommended()
+            create(IntelliJPlatformType.IntellijIdeaUltimate, properties("platformVersion").get())
         }
     }
 }
@@ -125,6 +122,15 @@ kover {
 }
 
 tasks {
+    val jetbrainsRuntime = environment("JETBRAINS_JDK_HOME").orNull
+    if (jetbrainsRuntime != null) {
+        configureEach {
+            if (this is RuntimeAware) {
+                runtimeDirectory.set(file(jetbrainsRuntime))
+            }
+        }
+    }
+
     wrapper {
         gradleVersion = properties("gradleVersion").get()
     }
