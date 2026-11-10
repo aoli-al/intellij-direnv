@@ -15,6 +15,12 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Maximize Build Space
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          large-packages: false
+
       - name: Fetch Sources
         uses: actions/checkout@v6
         with:
@@ -50,7 +56,7 @@ jobs:
             exit 1
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          ./gradlew buildPlugin verifyPluginStructure getChangelog --project-version="$VERSION" --no-header --output-file=build/release-notes.md --no-daemon
+          ./gradlew buildPlugin verifyPluginStructure verifyPlugin getChangelog --project-version="$VERSION" --no-header --output-file=build/release-notes.md --no-daemon
 
       - name: Publish to JetBrains Marketplace
         env:

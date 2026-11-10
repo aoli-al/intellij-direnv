@@ -1,6 +1,7 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
+import org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask
 import org.jetbrains.intellij.platform.gradle.tasks.aware.RuntimeAware
 
 fun properties(key: String) = providers.gradleProperty(key)
@@ -98,8 +99,17 @@ intellijPlatform {
     }
 
     pluginVerification {
+        freeArgs.add("-offline")
+        failureLevel.set(listOf(
+            VerifyPluginTask.FailureLevel.COMPATIBILITY_PROBLEMS,
+            VerifyPluginTask.FailureLevel.DEPRECATED_API_USAGES,
+            VerifyPluginTask.FailureLevel.MISSING_DEPENDENCIES,
+            VerifyPluginTask.FailureLevel.INVALID_PLUGIN,
+        ))
         ides {
-            create(IntelliJPlatformType.IntellijIdeaUltimate, properties("platformVersion").get())
+            properties("pluginVerificationVersions").get().split(',').forEach { version ->
+                create(IntelliJPlatformType.IntellijIdeaUltimate, version.trim())
+            }
         }
     }
 }
