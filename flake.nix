@@ -6,6 +6,7 @@
     {
       devShell.x86_64-linux = pkgs.mkShell {
         buildInputs = [
+          pkgs.actionlint
           pkgs.openjdk21
           pkgs.fontconfig
           pkgs.freetype
