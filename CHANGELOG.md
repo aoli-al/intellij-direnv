@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [0.3.8] - 2026-11-09
+
+- Fix opening `.envrc` from error notifications on IntelliJ IDEA 2026.2 and earlier supported versions.
+- Replace deprecated file-opening and resource-bundle APIs.
+- Compile against IDEA 2025.3 and verify compatibility with IDEA 2025.3, 2026.1, 2026.2.4, and 2026.3.
+
 ## [0.3.7] - 2026-11-09
 
 - Fix building against IntelliJ IDEA 2026.3 by bundling the Jackson JSON parser.

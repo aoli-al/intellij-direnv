@@ -10,7 +10,7 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.diagnostic.trace
-import com.intellij.openapi.fileEditor.FileEditorManager
+import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.VirtualFile
@@ -145,7 +145,7 @@ class DirenvProjectService(private val project: Project) {
                 NotificationAction.create(MyBundle.message("openEnvrc")) { _, it ->
                     it.hideBalloon()
 
-                    FileEditorManager.getInstance(project).openFile(envrcFile, true, true)
+                    OpenFileDescriptor(project, envrcFile).navigate(true)
                 },
             )
             .notify(project)
