@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [0.3.7] - 2026-11-09
+
+- Fix building against IntelliJ IDEA 2026.3 by bundling the Jackson JSON parser.
+- Build and verify against the configured IntelliJ IDEA platform.
+- Update build tooling and Nix dependencies, and fix Nix runtime and font configuration.
+
 ## [0.3.2] - 2026-03-10
 
 - Migrate build to IntelliJ Platform Gradle Plugin 2.x (`org.jetbrains.intellij.platform`)
